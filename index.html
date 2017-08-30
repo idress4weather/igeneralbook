@@ -419,7 +419,9 @@ function saveBookmark(e){
     mail: sMail,
     url: sUrl
   }
-	console.log(bookmark);
+	// Local Storage Test
+    localStorage.setItem('test', 'Hello World');
+    /*console.log(localStorage.getItem('test'));*/
 	e.preventDefault();
 }
   
