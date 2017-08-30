@@ -431,6 +431,18 @@ $("#selSnpts").on("change", function(){
 <button id="delBtn" class="snptText">Delete Selected</button>
 <button id="clrBtn" class="snptText">Clear</button>
 </div>
+	
+	
+	
+	
+	<!-- /* 
+ EDIT AN EXISTING SNIPPET
+ 0. Array is populated during LoadSnippets, so...
+ 1. Update corresponding array object
+ 2. Clear localStorage
+ 3. Save array back to local storage
+ */
+-->
  <div class="toggle">     
  <div class="content">
       <div class="jumbotron">
@@ -642,9 +654,29 @@ function saveBookmark(e){
     mail: sMail,
     url: sUrl
   }
-	// Local Storage Test
+	/*  // Local Storage Test
     localStorage.setItem('test', 'Hello World');
-    /*console.log(localStorage.getItem('test'));*/
+    console.log(localStorage.getItem('test'));
+    
+    localStorage.removeItem('test');
+    console.log(localStorage.getItem('test'));
+  */
+ // Test if bookmarks is null
+  if(localStorage.getItem('bookmarks') === null){
+    // Init array
+    let bookmarks = [];
+    // Add to array
+    bookmarks.push(bookmark);
+    // Set to localStorage
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  } else {
+    // Get bookmarks from localStorage
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+    // Add bookmark to array
+    bookmarks.push(bookmark);
+    // Re-set back to localStorage
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }	
 	e.preventDefault();
 }
   
