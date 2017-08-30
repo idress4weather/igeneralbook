@@ -206,7 +206,7 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
         
       </div-->
 
-<script>
+<!--script>
 	  $( document ).ready(function() {
   try{
     LoadSnippets();
@@ -430,7 +430,7 @@ $("#selSnpts").on("change", function(){
 <button id="editBtn" class="snptText">Update Selected</button>
 <button id="delBtn" class="snptText">Delete Selected</button>
 <button id="clrBtn" class="snptText">Clear</button>
-</div>
+</div-->
 	
 	
 	
@@ -679,7 +679,14 @@ function saveBookmark(e){
   }	
 	e.preventDefault();
 }
-  
+ // Fetch bookmarks
+function fetchBookmarks(){
+  // Get bookmarks from localStorage
+  let bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+  console.log(bookmarks);
+	// Get output id
+  let bookmarksResults = document.getElementById('bookmarksResults');
+ 
   // Get form values
   /*let sName =document.getElementById('sName').value;
   let sPhone =document.getElementById('sPhone').value;
