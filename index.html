@@ -289,7 +289,7 @@ document.getElementById('myForm').addEventListener('submit', saveBookmark);
 // Save Bookmark
 function saveBookmark(e){
 	
-	let sName = document.getElementById('sName');
+	let sName = document.getElementById('sName').value;
 	console.log(sName);
 	
 	e.preventDefault();
