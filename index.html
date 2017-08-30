@@ -284,16 +284,6 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
     <script>
 
 
-// Listen for form submit
-document.getElementById('myForm').addEventListener('submit', saveBookmark);
-// Save Bookmark
-function saveBookmark(e){
-	
-	let sName = document.getElementById('sName').value;
-	console.log(sName);
-	
-	e.preventDefault();
-}
 	   /* ;(function(global){
 
    let AddressBook = function(name,phone,email,url){
@@ -410,9 +400,29 @@ searchForm.addEventListener('submit', function(){
   
   //do something with the results
   event.preventDefault();
-});
+});*************************************-------------------------------------
 */
-    
+  // Listen for form submit
+document.getElementById('myForm').addEventListener('submit', saveBookmark);
+// Save Bookmark
+function saveBookmark(e){
+	
+	let sName = document.getElementById('sName').value;
+	let sPhone =document.getElementById('sPhone').value;
+  let sMail =document.getElementById('sEmail').value;
+  let sUrl =document.getElementById('sUrl').value;
+	console.log(sName);
+	
+	let bookmark = {
+    name: sName,
+    phone: sPhone,
+    mail: sMail,
+    url: sUrl
+  }
+	console.log(bookmark);
+	e.preventDefault();
+}
+  
   // Get form values
   /*let sName =document.getElementById('sName').value;
   let sPhone =document.getElementById('sPhone').value;
