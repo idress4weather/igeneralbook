@@ -282,7 +282,7 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
     </div> <!-- /container -->
  </div><!--"black"-->    
     <script type="text/javascript">
-/*
+
 ;(function(global){
 
    let AddressBook = function(name,phone,email,url){
@@ -331,8 +331,6 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
          }
          
          return this.searchResults;
-*/
-
 
       /* }else if(this.data.length){************************
          for(var i=0;i<this.data.length;i++){
@@ -344,9 +342,7 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
          ********************
          return this.searchResults;*/
       
-	       
-	       
-	       /*
+	
       
       
       }else{
@@ -404,12 +400,14 @@ searchForm.addEventListener('submit', function(){
   //do something with the results
   event.preventDefault();
 });
-	    */
+	    
 // Listen for form submit
 document.getElementById('myForm').addEventListener('submit', saveBookmark);
 // Save Bookmark
 function saveBookmark(e){
-	console.log('It works');
+	
+	let sName = document.getElementById('sName');
+	console.log('sName');
 	
 	e.preventDefault();
 }
