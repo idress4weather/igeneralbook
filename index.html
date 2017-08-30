@@ -282,7 +282,7 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
     </div> <!-- /container -->
  </div><!--"black"-->    
     <script type="text/javascript">
-
+/*
 ;(function(global){
 
    let AddressBook = function(name,phone,email,url){
@@ -331,19 +331,25 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
          }
          
          return this.searchResults;
+*/
 
 
-
-      /* }else if(this.data.length){
+      /* }else if(this.data.length){************************
          for(var i=0;i<this.data.length;i++){
            if(this.data[i].name.toLowerCase() == searchTerm.toLowerCase()){
              console.error(this.data[i]);
              this.searchResults.push(this.data[i]);
            }
          }
-         
+         ********************
          return this.searchResults;*/
-       }else{
+      
+	       
+	       
+	       /*
+      
+      
+      }else{
          console.log("There are no results");
        }
        return this;
@@ -398,6 +404,7 @@ searchForm.addEventListener('submit', function(){
   //do something with the results
   event.preventDefault();
 });
+	    */
 // Listen for form submit
 document.getElementById('myForm').addEventListener('submit', saveBookmark);
 // Save Bookmark
