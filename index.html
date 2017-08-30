@@ -206,8 +206,231 @@ var utterance = new SpeechSynthesisUtterance('How about we say this now? This is
         
       </div-->
 
+<script>
+	  $( document ).ready(function() {
+  try{
+    LoadSnippets();
+  }  catch(err) {
+    console.log("Document.Ready() Error: " + err.Message);
+  }  
+});
 
+//global array
+var snippets = new Array();
+var snptDS;
 
+//Snippet constructor
+function Snippet(){
+  this.ID = "";
+  this.Topic = "";
+  this.Content = "";
+}
+
+function GetID(){
+  //generate a unique ID
+  if (localStorage.getItem("SnippetCollection") !== null){
+    return JSON.parse(localStorage.SnippetCollection).length + 1;
+  } else {
+    return 1;
+  }
+}
+ 
+function getSnippetTopicById(json, snptId){ 
+    return json.filter(function(s){return s.ID == snptId;})[0].Topic; 
+} 
+function getSnippetContentById(json, snptId){ 
+    return json.filter(function(s){return s.ID == snptId;})[0].Content; 
+} 
+
+/*0. Load snippets into array (to be used for editing)
+  1. Load snippets into the dropdown*/
+function LoadSnippets(){
+  try{
+    //retrieve localStorage data
+    snptDS = JSON.parse(localStorage["SnippetCollection"]);
+    //prepare to load snippets
+    snippets = new Array();    
+    $("#selSnpts").children().remove();    
+    //retrieve each topic/content pair
+    $.each(snptDS, function (count){
+      /*jQuery $.each will update index(count) automatically
+      jQuery initializes the index to 0, we have to increase
+      it by 1 because we want unique snippets IDs to start at 1*/
+      var optTopic = getSnippetTopicById(snptDS, count + 1);
+      var optContent = getSnippetContentById(snptDS, count + 1);  
+      //persist localStorage data to array
+      var snpt = new Snippet();
+      snpt.ID = count + 1;
+      snpt.Topic = optTopic;
+      snpt.Content = optContent; 
+      snippets.push(snpt);      
+      //load topics to dropdown
+      $('#selSnpts').append($('<option/>', { 
+        value: count,
+        text : optTopic 
+      }));
+  }); 
+  //show details for first snippet
+  $("#selSnpts").trigger("change"); 
+  } catch(err) {
+    console.log("LoadSnippets() Error: " + err.message);
+    }
+}
+
+$("#saveBtn").on("click", function(){  
+  try{
+    //Enforce Rule: Topic is a required field.
+    if ($("#topic").val().length == 0){
+      return $("#msgs").text("Topic is a required field.");
+    } else { $("#msgs").text(""); }
+    
+    //create a new snippet object
+    var snpt = new Snippet();
+    snpt.ID = GetID();
+    snpt.Topic = $("#topic").val();   
+    snpt.Content = $("#content").val();    
+    //add new snippet object to snippets array
+    snippets.push(snpt);
+    //save the array to localstorage
+    localStorage.setItem( 'SnippetCollection', JSON.stringify(snippets) );
+    //reload to pull in new snippets
+    LoadSnippets(); 
+    //clear input fields
+    $("#clrBtn").trigger("click");
+    //show details for first snippet
+    $("#selSnpts").trigger("change"); 
+  } catch(err) {
+    console.log("Save() Error: " + err.Message);
+  }   
+});
+
+$("#delBtn").on("click", function(){  
+
+  try{
+    //retrieve localStorage data
+    snptDS = JSON.parse(localStorage["SnippetCollection"]);
+    //prepare to load snippets
+    snippets = new Array();  
+    var nextID = 1;
+    var delItem = parseInt($("#selSnpts").val()) + 1;
+    //retrieve each topic/content pair
+    $.each(snptDS, function (count){
+      /*jQuery $.each will update index(count) automatically.
+      jQuery initializes the index to 0, we have to increase
+      it by 1 because we want unique snippet IDs to start at 1*/
+      var optTopic = getSnippetTopicById(snptDS, count + 1);
+      var optContent = getSnippetContentById(snptDS, count + 1);  
+      //Re-use IDs: persist data as new array objects unless...
+      //it's associated with the ID of the snippet to be deleted.      
+      var snpt = new Snippet();
+      if (delItem != count + 1){ 
+        snpt.ID = nextID;
+        snpt.Topic = optTopic;
+        snpt.Content = optContent; 
+        snippets.push(snpt);
+        nextID++;
+      } 
+  });
+  //remove the SnippetCollection from localStorage
+  localStorage.removeItem("SnippetCollection");
+  //save the new array to localstorage
+  localStorage.setItem( 'SnippetCollection', JSON.stringify(snippets));
+  //clear input fields
+  $("#clrBtn").trigger("click");
+  //load topics to dropdown
+  LoadSnippets();
+  } catch(err) {
+    console.log("DeleteSnippets() Error: " + err.message);
+    }
+});
+
+$("#editBtn").on("click", function(){
+ /* 
+ EDIT AN EXISTING SNIPPET
+ 0. Array is populated during LoadSnippets, so...
+ 1. Update corresponding array object
+ 2. Clear localStorage
+ 3. Save array back to local storage
+ */
+  
+  try{
+    //Enforce Rule: Topic is a required field.
+    if ($("#topic").val().length == 0){
+      return $("#msgs").text("Topic is a required field.");
+    } else { $("#msgs").text(""); }
+    
+    var editItem = parseInt($("#selSnpts").val()) + 1;
+    //retrieve each topic/content pair
+    $.each(snippets, function (count){
+      if (editItem == count + 1){ 
+        snippets[count].Topic = $("#topic").val();
+        snippets[count].Content = $("#content").val();
+      } 
+    });
+  //remove the SnippetCollection from localStorage
+  localStorage.removeItem("SnippetCollection");
+  //save the new array to localstorage
+  localStorage.setItem( 'SnippetCollection', JSON.stringify(snippets));
+  //clear input fields
+  $("#clrBtn").trigger("click");
+  //load topics to dropdown
+  LoadSnippets();
+  } catch(err) {
+    console.log("Update() Error: " + err.Message);  
+  }
+});
+
+$("#clrBtn").on("click", function(){
+  $("#topic").val("");
+  $("#content").val("");
+  $("#msgs").text("");
+});
+
+$("#selSnpts").on("change", function(){
+  var ID = $(this).val();
+  //<select/> values begin at 0, but snippet IDs begin at 1, so...
+  ID++;  
+  //display topic and content when a selection is made
+  $("#topic").val(getSnippetTopicById(snptDS, ID));
+  $("#content").val(getSnippetContentById(snptDS, ID));
+});
+	  </script><style>
+	  #snptArea {
+		  position: relative;
+  border: 2px solid lightgrey;
+  padding: 5px;
+  margin: 5px;
+}
+.snptText {
+  color: blue;
+}
+#msgs {
+    color: red;
+}
+	  </style>
+<div id="snptArea">
+  <h3 class="snptText" align="center">Search Snippets</h3>
+  <hr/>
+  <label class="snptText">Select a Snippet to view its details:</label>
+  <select id="selSnpts"><option>No snippets have been created yet</option>
+  </select>
+  </select>
+<br/><br/><br/><br/>
+  <h3 class="snptText" align="center">Create Snippets</h3>
+  <hr/>
+  <div class="snptText">Topic: </div>
+  <input type="text" id="topic" size="50" placeholder="Topic for this snippet"/>
+  <br/><br/>
+  <div class="snptText">Content: </div>
+  <textarea rows="10" cols="50" id="content" placeholder="Examples and content for this snippet"></textarea>
+  </form>
+<br/>
+<label id="msgs" class="snptText"></label><br/>
+<button id="saveBtn" class="snptText">Create New</button>
+<button id="editBtn" class="snptText">Update Selected</button>
+<button id="delBtn" class="snptText">Delete Selected</button>
+<button id="clrBtn" class="snptText">Clear</button>
+</div>
  <div class="toggle">     
  <div class="content">
       <div class="jumbotron">
