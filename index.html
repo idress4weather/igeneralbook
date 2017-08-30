@@ -402,8 +402,12 @@ searchForm.addEventListener('submit', function(){
 document.getElementById('myForm').addEventListener('submit', saveBookmark);
 // Save Bookmark
 function saveBookmark(e){
+	console.log('It works');
+	
+	e.preventDefault();
+}
   // Get form values
-  let sName =document.getElementById('sName').value;
+  /*let sName =document.getElementById('sName').value;
   let sPhone =document.getElementById('sPhone').value;
   let sMail =document.getElementById('sEmail').value;
   let sUrl =document.getElementById('sUrl').value;
@@ -417,10 +421,10 @@ function saveBookmark(e){
     phone: sPhone,
     mail: sMail,
     url: sUrl
-  }
+  }*/
 
-  /*
-    // Local Storage Test
+  
+  /*  // Local Storage Test
     localStorage.setItem('test', 'Hello World');
     console.log(localStorage.getItem('test'));
     localStorage.removeItem('test');
